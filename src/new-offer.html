@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nova Promoção</title>
+</head>
+<body>
+<header id="header"></header>
+<form action="" method="post">
+    <h3>Nova Promoção</h3>
+    <label for="name">Nome</label>
+    <input type="text" name="name" id="name" /><br><br>
+
+    <h5>requiredIngredients</h5>
+    <section id="required"></section>
+
+    <h5>excludedIngredients</h5>
+    <section id="excluded"></section>
+
+    <label for="discount-type">Tipo de desconto</label>
+    <select id="discount-type">
+        <option value="DISH_TOTAL_PRICE_PERCENTAGE_DISCOUNT">
+            Desconto em porcentagem no preço do prato
+        </option>
+        <option value="INGREDIENT_QUANTITY_DISCOUNT">
+            Desconto na porção do ingrediente
+        </option>
+    </select><br><br>
+
+    <div style="display: none" id="discount-amount-container">
+        <label for="discount-amount">Desconto</label>
+        <input type="text" name="discount-amount" id="discount-amount"><br><br>
+    </div>
+
+    <button type="button" onclick="submitForm()">Criar Oferta</button>
+</form>
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="global.js"></script>
+<script src="./new-offer.js"></script>
+</html>
