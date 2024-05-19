@@ -58,5 +58,5 @@ $.getJSON("http://localhost:8080/dishes", function(dishes) {
         tr.append(tdMore);
 
         $("#dishes-tbody").append(tr);
-    })
+    });
 });

@@ -11,6 +11,19 @@ $.getJSON = function(url, callback) {
     });
 };
 
+$.deleteJSON = function(url, callback) {
+    return jQuery.ajax({
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        'type': 'DELETE',
+        'url': url,
+        'dataType': 'json',
+        'success': callback
+    });
+};
+
 $.getJSON("http://localhost:8080/offers", function(offers) {
     offers.forEach(function(offer) {
         const tr = document.createElement("tr");
@@ -41,7 +54,7 @@ $.getJSON("http://localhost:8080/offers", function(offers) {
         buttonDelete.innerText = "Remover";
         buttonDelete.addEventListener("click", function(event) {
             event.preventDefault();
-            $.deleteJSON("http://localhost:8080/ingredients/" + ingredient.id, function() {
+            $.deleteJSON("http://localhost:8080/offers/" + offer.id, function() {
                 location.reload();
             });
         });
@@ -58,5 +71,5 @@ $.getJSON("http://localhost:8080/offers", function(offers) {
         tr.append(tdMore);
 
         $("#offers-tbody").append(tr);
-    })
+    });
 });
