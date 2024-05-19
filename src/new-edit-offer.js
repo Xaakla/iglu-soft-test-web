@@ -1,12 +1,51 @@
+let id = null;
+
+function getUrlParameter(name) {
+    const results = new RegExp('[?&]' + name + '=([^&#]*)').exec(window.location.href);
+    return results !== null ? decodeURIComponent(results[1]) : null;
+}
+
+$.getJSON = function (url, callback) {
+    return jQuery.ajax({
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        'type': 'GET',
+        'url': url,
+        'dataType': 'json',
+        'success': callback
+    });
+};
+
 $(document).ready(function() {
+    id = getUrlParameter('id');
+
+    $.getJSON("http://localhost:8080/offers/" + id, function (ingredient) {
+        $("#name").val(ingredient.name);
+        ingredient.requiredIngredients.forEach(it => {
+            $("#required"+it.ingredient.id).prop("checked", true);
+            $("#min-quantity-required"+it.ingredient.id).val(it.minQuantity);
+            $("#paid-quantity-required"+it.ingredient.id).val(it.paidQuantity);
+        });
+        ingredient.excludedIngredients.forEach(it => {
+            $("#excluded"+it.ingredient.id).prop("checked", true);
+            $("#min-quantity-excluded"+it.ingredient.id).val(it.minQuantity);
+            $("#paid-quantity-excluded"+it.ingredient.id).val(it.paidQuantity);
+        });
+        $("#required").val(ingredient.name);
+        $("#discount-type").val(ingredient.discountType);
+        $("#discount-amount").val(ingredient.discountAmount);
+    });
+
     const discountType = $('#discount-type');
 
     // Função para verificar o valor do select e mostrar/esconder o input
     function toggleInput() {
         if (discountType.val() === 'INGREDIENT_QUANTITY_DISCOUNT') {
-            $('#discount-amount-container').show();
-        } else {
             $('#discount-amount-container').hide();
+        } else {
+            $('#discount-amount-container').show();
         }
     }
 
@@ -76,6 +115,7 @@ function createIngredientsElements(type, ingredient) {
 
 function submitForm() {
     const data = {
+        id,
         name: $("#name").val(),
         requiredIngredients: $('input[type="checkbox"][name="required"]:checked').map(function() {
             return {
@@ -110,6 +150,6 @@ function submitForm() {
     };
 
     $.postJSON("http://localhost:8080/offers", data, function() {
-        console.debug("Inserted: ");
+        window.location.href = 'offers.html';
     });
 }
