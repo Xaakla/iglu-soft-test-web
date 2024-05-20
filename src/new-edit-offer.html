@@ -11,12 +11,6 @@
     <label for="name">Nome</label>
     <input type="text" name="name" id="name" /><br><br>
 
-    <h5>requiredIngredients</h5>
-    <section id="required"></section>
-
-    <h5>excludedIngredients</h5>
-    <section id="excluded"></section>
-
     <label for="discount-type">Tipo de desconto</label>
     <select id="discount-type">
         <option value="DISH_TOTAL_PRICE_PERCENTAGE_DISCOUNT">
@@ -25,13 +19,19 @@
         <option value="INGREDIENT_QUANTITY_DISCOUNT">
             Desconto na porção do ingrediente
         </option>
-    </select><br><br>
+    </select><br>
+
+    <h5>requiredIngredients</h5>
+    <section id="required"></section>
+
+    <h5>excludedIngredients</h5>
+    <section id="excluded"></section>
 
     <div style="display: none" id="discount-amount-container">
         <label for="discount-amount">Desconto</label>
         <input type="text" name="discount-amount" id="discount-amount"><br><br>
     </div>
-
+    <br>
     <button type="button" onclick="submitForm()">Salvar Oferta</button>
 </form>
 </body>

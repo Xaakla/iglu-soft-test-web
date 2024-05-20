@@ -14,47 +14,61 @@ $.getJSON = function(url, callback) {
 $.getJSON("http://localhost:8080/ingredients", function(ingredients) {
     $.getJSON("http://localhost:8080/dishes", function(dishes) {
         dishes.forEach(function(dish) {
-            var label = document.createElement("label");
+            const label = document.createElement("label");
             label.innerText = dish.name;
             label.htmlFor = dish.id;
 
-            var inputCheckbox = document.createElement("input");
+            const inputCheckbox = document.createElement("input");
             inputCheckbox.type = "checkbox";
             inputCheckbox.id = dish.id;
             inputCheckbox.name = "dish-input";
             inputCheckbox.value = dish.id;
 
             const ingredientsDiv = document.createElement("div");
+            ingredientsDiv.style.display = "none";
+
+            inputCheckbox.addEventListener("change", function(event) {
+                ingredientsDiv.style.display = event.target.checked ? "inline-block" : "none";
+            });
+
             const ingredientDivH5 = document.createElement("h5").innerText = "Selecionar adicionais: ";
             ingredientsDiv.append(ingredientDivH5);
             ingredientsDiv.append(document.createElement("br"));
             ingredients.forEach(it => {
-                var label = document.createElement("label");
+                const label = document.createElement("label");
                 label.innerText = it.name;
                 label.htmlFor = dish.id+'-'+it.id;
 
-                var inputCheckbox = document.createElement("input");
-                inputCheckbox.type = "checkbox";
-                inputCheckbox.id = dish.id+'-'+it.id;
-                inputCheckbox.name = "ingredient-input"+dish.id;
-                inputCheckbox.value = dish.id+'-'+it.id;
+                const inputCheckboxIngredient = document.createElement("input");
+                inputCheckboxIngredient.type = "checkbox";
+                inputCheckboxIngredient.id = dish.id+'-'+it.id;
+                inputCheckboxIngredient.name = "ingredient-input"+dish.id;
+                inputCheckboxIngredient.value = dish.id+'-'+it.id;
 
-                var inputQuantity = document.createElement("input");
+                const inputQuantity = document.createElement("input");
                 inputQuantity.type = "number";
                 inputQuantity.id = "quantity-"+dish.id+'-'+it.id;
                 inputQuantity.name = "quantity-"+dish.id;
                 inputQuantity.value = 0;
+                inputQuantity.style.display = "none";
+
+                inputCheckboxIngredient.addEventListener("change", function(event) {
+                    inputQuantity.style.display = event.target.checked ? "inline-block" : "none";
+                });
 
                 ingredientsDiv.append(label);
-                ingredientsDiv.append(inputCheckbox);
+                ingredientsDiv.append(inputCheckboxIngredient);
                 ingredientsDiv.append(inputQuantity);
             });
-
 
             $("#dishes").append(label).append(inputCheckbox).append(`<br><br>`).append(ingredientsDiv);
         });
     });
 });
+
+function handleToggleInput() {
+
+}
 
 function submitForm() {
     const data = $('input[type="checkbox"][name="dish-input"]:checked').map(function() {
@@ -92,8 +106,6 @@ function submitForm() {
             const h3 = document.createElement("h3");
             h3.innerText = dish.name + ' - ' + dish.salePrice;
             dishDiv.append(h3);
-
-            const br = document.createElement("br");
 
             const p = document.createElement("p");
             let text = '';

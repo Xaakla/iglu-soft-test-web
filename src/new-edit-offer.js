@@ -23,6 +23,7 @@ $(document).ready(function() {
 
     $.getJSON("http://localhost:8080/offers/" + id, function (ingredient) {
         $("#name").val(ingredient.name);
+        $("#discount-type").val(ingredient.discountType);
         ingredient.requiredIngredients.forEach(it => {
             $("#required"+it.ingredient.id).prop("checked", true);
             $("#min-quantity-required"+it.ingredient.id).val(it.minQuantity);
@@ -34,28 +35,15 @@ $(document).ready(function() {
             $("#paid-quantity-excluded"+it.ingredient.id).val(it.paidQuantity);
         });
         $("#required").val(ingredient.name);
-        $("#discount-type").val(ingredient.discountType);
         $("#discount-amount").val(ingredient.discountAmount);
+
+        handleToggleInput();
     });
-
-    const discountType = $('#discount-type');
-
-    // Função para verificar o valor do select e mostrar/esconder o input
-    function toggleInput() {
-        if (discountType.val() === 'INGREDIENT_QUANTITY_DISCOUNT') {
-            $('#discount-amount-container').hide();
-        } else {
-            $('#discount-amount-container').show();
-        }
-    }
 
     // Chama a função quando o valor do select muda
-    discountType.change(function() {
-        toggleInput();
+    $('#discount-type').change(function() {
+        handleToggleInput();
     });
-
-    // Chama a função quando a página carrega para definir o estado inicial do input
-    toggleInput();
 });
 
 $.getJSON = function(url, callback) {
@@ -75,8 +63,24 @@ $.getJSON("http://localhost:8080/ingredients", function(ingredients) {
     ingredients.forEach(function(ingredient) {
         createIngredientsElements("required", ingredient);
         createIngredientsElements("excluded", ingredient);
+
+        handleToggleInput();
     })
 });
+
+function handleToggleInput() {
+    if ($("#discount-type").val() === 'INGREDIENT_QUANTITY_DISCOUNT') {
+        $('#discount-amount-container').css('display', 'none');
+        $('.label-paid-qtd').css('display', 'inline-block');
+        $('input[name="paid-quantity-required"]').css('display', 'inline-block');
+        $('input[name="paid-quantity-excluded"]').css('display', 'inline-block');
+    } else {
+        $('#discount-amount-container').css('display', 'inline-block');
+        $('.label-paid-qtd').css('display', 'none');
+        $('input[name="paid-quantity-required"]').css('display', 'none');
+        $('input[name="paid-quantity-excluded"]').css('display', 'none');
+    }
+}
 
 function createIngredientsElements(type, ingredient) {
     var label = document.createElement("label");
@@ -95,16 +99,17 @@ function createIngredientsElements(type, ingredient) {
     var inputMinQuantity = document.createElement("input");
     inputMinQuantity.type = "number";
     inputMinQuantity.id = "min-quantity-"+type+ingredient.id;
-    inputMinQuantity.name = "min-quantity-"+type+ingredient.id;
+    inputMinQuantity.name = "min-quantity-"+type;
     inputMinQuantity.value = 0;
 
     var labelInputPaidQuantity = document.createElement("label");
     labelInputPaidQuantity.innerText = "Qtd Paga";
+    labelInputPaidQuantity.classList.add("label-paid-qtd");
     labelInputPaidQuantity.htmlFor = "paid-quantity-"+type+ingredient.id;
     var inputPaidQuantity = document.createElement("input");
     inputPaidQuantity.type = "number";
     inputPaidQuantity.id = "paid-quantity-"+type+ingredient.id;
-    inputPaidQuantity.name = "paid-quantity-"+type+ingredient.id;
+    inputPaidQuantity.name = "paid-quantity-"+type;
     inputPaidQuantity.value = 0;
 
     $("#"+type).append(label).append(inputCheckbox)

@@ -34,10 +34,19 @@ $(document).ready(function () {
             inputCheckbox.value = ingredient.id;
 
             var inputQuantity = document.createElement("input");
+            inputQuantity.style.display = "none";
             inputQuantity.type = "number";
             inputQuantity.id = "quantity-"+ingredient.id;
             inputQuantity.name = "quantity-"+ingredient.id;
             inputQuantity.value = 0;
+
+            inputCheckbox.addEventListener("change", function() {
+                if (inputCheckbox.checked) {
+                    $("#quantity-"+ingredient.id).show(); // Mostra o input number
+                } else {
+                    $("#quantity-"+ingredient.id).hide(); // Esconde o input number
+                }
+            })
 
             $("#ingredients").append(label).append(inputCheckbox).append(inputQuantity).append(`<br><br>`);
         });
@@ -45,9 +54,9 @@ $(document).ready(function () {
 
     $.getJSON("http://localhost:8080/dishes/" + id, function (dish) {
         dish.ingredients.forEach(function (ingredient) {
-            console.log(ingredient)
             $("#"+ingredient.ingredient.id).prop("checked", true);
             $("#quantity-"+ingredient.ingredient.id).val(ingredient.quantity);
+            document.getElementById("quantity-"+ingredient.ingredient.id).style.display = "inline-block";
         });
 
         $("#name").val(dish.name);
