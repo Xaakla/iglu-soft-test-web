@@ -24,12 +24,6 @@ $.getJSON("http://localhost:8080/ingredients", function(ingredients) {
             inputCheckbox.name = "dish-input";
             inputCheckbox.value = dish.id;
 
-            var inputQuantity = document.createElement("input");
-            inputQuantity.type = "number";
-            inputQuantity.id = "quantity-"+dish.id;
-            inputQuantity.name = "quantity-"+dish.id;
-            inputQuantity.value = 0;
-
             const ingredientsDiv = document.createElement("div");
             const ingredientDivH5 = document.createElement("h5").innerText = "Selecionar adicionais: ";
             ingredientsDiv.append(ingredientDivH5);
@@ -37,18 +31,18 @@ $.getJSON("http://localhost:8080/ingredients", function(ingredients) {
             ingredients.forEach(it => {
                 var label = document.createElement("label");
                 label.innerText = it.name;
-                label.htmlFor = it.id;
+                label.htmlFor = dish.id+'-'+it.id;
 
                 var inputCheckbox = document.createElement("input");
                 inputCheckbox.type = "checkbox";
-                inputCheckbox.id = it.id;
+                inputCheckbox.id = dish.id+'-'+it.id;
                 inputCheckbox.name = "ingredient-input"+dish.id;
-                inputCheckbox.value = it.id;
+                inputCheckbox.value = dish.id+'-'+it.id;
 
                 var inputQuantity = document.createElement("input");
                 inputQuantity.type = "number";
-                inputQuantity.id = "quantity-"+it.id;
-                inputQuantity.name = "quantity-"+it.id;
+                inputQuantity.id = "quantity-"+dish.id+'-'+it.id;
+                inputQuantity.name = "quantity-"+dish.id;
                 inputQuantity.value = 0;
 
                 ingredientsDiv.append(label);
@@ -57,27 +51,26 @@ $.getJSON("http://localhost:8080/ingredients", function(ingredients) {
             });
 
 
-            $("#dishes").append(label).append(inputCheckbox).append(inputQuantity).append(`<br><br>`)
-                .append(ingredientsDiv);
+            $("#dishes").append(label).append(inputCheckbox).append(`<br><br>`).append(ingredientsDiv);
         });
     });
 });
 
 function submitForm() {
     const data = $('input[type="checkbox"][name="dish-input"]:checked').map(function() {
+        const dishId = $(this).val();
         const ingredientInputName = "ingredient-input"+this.value;
         return {
             dishId: Number(this.value),
             ingredients: $('input[type="checkbox"][name="'+ingredientInputName+'"]:checked').map(function() {
+                const ingredientId = this.value.split('-')[1];
                 return {
-                    ingredientId: Number(this.value),
-                    quantity: Number($("#quantity-"+this.value).val()),
+                    ingredientId,
+                    quantity: $("#quantity-"+dishId+'-'+ingredientId).val(),
                 }
             }).get()
         };
     }).get();
-
-    console.log(data)
 
     $.postJSON = function(url, data, callback) {
         return jQuery.ajax({
@@ -93,7 +86,27 @@ function submitForm() {
         });
     };
 
-    $.postJSON("http://localhost:8080/orders", data, function() {
-        // window.location.href = 'dishes.html';
+    $.postJSON("http://localhost:8080/orders", data, function(result) {
+        result.dishes.forEach(function(dish) {
+            const dishDiv = document.createElement("div");
+            const h3 = document.createElement("h3");
+            h3.innerText = dish.name + ' - ' + dish.salePrice;
+            dishDiv.append(h3);
+
+            const br = document.createElement("br");
+
+            const p = document.createElement("p");
+            let text = '';
+            dish.ingredients.forEach((it, i) => {
+                text += it.quantity + 'x ' + it.name + (i === dish.ingredients.length - 1 ? '' : ', ');
+            });
+            console.log('text: ', text)
+            p.innerText = text;
+            dishDiv.append(p);
+
+            const resultDiv = $('#result');
+            resultDiv.empty();
+            resultDiv.append(dishDiv);
+        });
     });
 }

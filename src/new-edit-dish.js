@@ -40,7 +40,7 @@ $(document).ready(function () {
             inputQuantity.value = 0;
 
             $("#ingredients").append(label).append(inputCheckbox).append(inputQuantity).append(`<br><br>`);
-        })
+        });
     });
 
     $.getJSON("http://localhost:8080/dishes/" + id, function (dish) {
