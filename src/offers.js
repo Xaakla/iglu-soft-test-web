@@ -41,8 +41,8 @@ $.getJSON("http://localhost:8080/offers", function(offers) {
 
             tdId.innerText = offer.id;
             tdName.innerText = offer.name;
-            tdDiscountType.innerText = offer.discountType;
-            tdDiscountAmount.innerText = offer.discountAmount;
+            tdDiscountType.innerText = offer.discountType === "DISH_TOTAL_PRICE_PERCENTAGE_DISCOUNT" ? "Porcentagem" : "Compre X page Y";
+            tdDiscountAmount.innerText = Number(offer.discountAmount) > 0 ? offer.discountAmount+"%" : '-';
             tdRequired.innerText = offer.requiredIngredients.map(it => {
                 return it.ingredient.name;
             });

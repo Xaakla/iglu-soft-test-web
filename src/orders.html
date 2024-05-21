@@ -2,14 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Pedidos</title>
+    <link rel="stylesheet" href="./global.css">
+    <link rel="stylesheet" href="./orders.css">
 </head>
 <body>
 <header id="header"></header>
-<h4>Selecione os pratos do pedido: </h4>
+<h4 id="title" style="display: none">Selecione os lanches do pedido: </h4>
 <section id="dishes"></section>
 <br>
-<button type="button" onclick="submitForm()">Fazer Pedido</button>
+<button id="btn-order" style="display: none" type="button" onclick="submitForm()">Fazer Pedido</button>
 
 <section id="result"></section>
 </body>

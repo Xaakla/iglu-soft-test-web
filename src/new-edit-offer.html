@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Nova Promoção</title>
+    <link rel="stylesheet" href="./global.css">
+    <link rel="stylesheet" href="./offers.css">
 </head>
 <body>
 <header id="header"></header>
@@ -14,17 +16,17 @@
     <label for="discount-type">Tipo de desconto</label>
     <select id="discount-type">
         <option value="DISH_TOTAL_PRICE_PERCENTAGE_DISCOUNT">
-            Desconto em porcentagem no preço do prato
+            Desconto em porcentagem no preço do lanche
         </option>
         <option value="INGREDIENT_QUANTITY_DISCOUNT">
             Desconto na porção do ingrediente
         </option>
     </select><br>
 
-    <h5>requiredIngredients</h5>
+    <h2>requiredIngredients</h2>
     <section id="required"></section>
 
-    <h5>excludedIngredients</h5>
+    <h2>excludedIngredients</h2>
     <section id="excluded"></section>
 
     <div style="display: none" id="discount-amount-container">

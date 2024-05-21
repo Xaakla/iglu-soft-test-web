@@ -38,7 +38,7 @@ $.getJSON("http://localhost:8080/ingredients", function(ingredients) {
 
             tdId.innerText = ingredient.id;
             tdName.innerText = ingredient.name;
-            tdPrice.innerText = ingredient.salePrice;
+            tdPrice.innerText = "R$ "+(ingredient.salePrice / 100).toFixed(2);
             const aEdit = document.createElement("a");
             aEdit.innerText = "Editar";
             aEdit.href = "new-edit-ingredient.html?id=" + ingredient.id;
